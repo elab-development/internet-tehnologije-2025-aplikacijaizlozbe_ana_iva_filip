@@ -13,7 +13,7 @@ import {
 // =====================
 export const korisnici = pgTable("korisnik", {
   korisnikId: serial("korisnik_id").primaryKey(),
-  rola: varchar("rola", { length: 30 }).notNull(), // npr: ADMIN | KORISNIK | FOTOGRAF
+  rola: varchar("rola", { length: 30 }).notNull(), // npr: ADMIN | USER | FOTOGRAF
   imePrezime: varchar("ime_prezime", { length: 120 }).notNull(),
   email: varchar("email", { length: 255 }).notNull(),
   passwordHash: varchar("password_hash", { length: 255 }).notNull(),
@@ -29,7 +29,7 @@ export const fotografi = pgTable("fotograf", {
   korisnikId: integer("korisnik_id")
     .notNull()
     .references(() => korisnici.korisnikId, { onDelete: "cascade" }),
-  nazivFotografa: varchar("naziv_fotografa", { length: 120 }).notNull(),
+  nazivFotografa: varchar("naziv_fotografa", { length: 100 }).notNull(),
 }, (t) => ({
   korisnikUq: uniqueIndex("fotograf_korisnik_uq").on(t.korisnikId), // 0..1 fotograf po korisniku
 }));
@@ -43,6 +43,8 @@ export const izlozbe = pgTable("izlozba", {
   opisIzlozbe: text("opis_izlozbe"),
   lokacija: varchar("lokacija", { length: 150 }).notNull(),
   datum: timestamp("datum", { withTimezone: false }).notNull(),
+  status: varchar("status", { length: 20 }).notNull().default("AKTIVNA"),
+
 });
 
 // =====================

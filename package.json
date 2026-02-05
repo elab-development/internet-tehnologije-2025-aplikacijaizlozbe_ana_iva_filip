@@ -2,11 +2,15 @@
   "name": "backend",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:migrate": "npx drizzle-kit generate && npx drizzle-kit push",
+    "db:seed": "tsx src/db/seed.ts"
+
   },
   "dependencies": {
     "@remixicon/react": "^4.9.0",
