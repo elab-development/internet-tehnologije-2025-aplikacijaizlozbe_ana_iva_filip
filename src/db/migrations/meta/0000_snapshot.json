@@ -1,0 +1,384 @@
+{
+  "id": "7ee9746e-7c7a-41e3-ad33-fe36ca36c7d0",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "version": "7",
+  "dialect": "postgresql",
+  "tables": {
+    "public.fotograf": {
+      "name": "fotograf",
+      "schema": "",
+      "columns": {
+        "fotograf_id": {
+          "name": "fotograf_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "korisnik_id": {
+          "name": "korisnik_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "naziv_fotografa": {
+          "name": "naziv_fotografa",
+          "type": "varchar(120)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "fotograf_korisnik_uq": {
+          "name": "fotograf_korisnik_uq",
+          "columns": [
+            {
+              "expression": "korisnik_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "fotograf_korisnik_id_korisnik_korisnik_id_fk": {
+          "name": "fotograf_korisnik_id_korisnik_korisnik_id_fk",
+          "tableFrom": "fotograf",
+          "tableTo": "korisnik",
+          "columnsFrom": [
+            "korisnik_id"
+          ],
+          "columnsTo": [
+            "korisnik_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.izlozba": {
+      "name": "izlozba",
+      "schema": "",
+      "columns": {
+        "izlozba_id": {
+          "name": "izlozba_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "naziv_izlozbe": {
+          "name": "naziv_izlozbe",
+          "type": "varchar(150)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "opis_izlozbe": {
+          "name": "opis_izlozbe",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "lokacija": {
+          "name": "lokacija",
+          "type": "varchar(150)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "datum": {
+          "name": "datum",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.karta": {
+      "name": "karta",
+      "schema": "",
+      "columns": {
+        "karta_id": {
+          "name": "karta_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "registracija_id": {
+          "name": "registracija_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "qr_code_path": {
+          "name": "qr_code_path",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "karta_registracija_id_korisnik_izlozba_registracija_id_fk": {
+          "name": "karta_registracija_id_korisnik_izlozba_registracija_id_fk",
+          "tableFrom": "karta",
+          "tableTo": "korisnik_izlozba",
+          "columnsFrom": [
+            "registracija_id"
+          ],
+          "columnsTo": [
+            "registracija_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.korisnik": {
+      "name": "korisnik",
+      "schema": "",
+      "columns": {
+        "korisnik_id": {
+          "name": "korisnik_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "rola": {
+          "name": "rola",
+          "type": "varchar(30)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "ime_prezime": {
+          "name": "ime_prezime",
+          "type": "varchar(120)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "email": {
+          "name": "email",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "password_hash": {
+          "name": "password_hash",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        }
+      },
+      "indexes": {
+        "korisnik_email_uq": {
+          "name": "korisnik_email_uq",
+          "columns": [
+            {
+              "expression": "email",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.korisnik_izlozba": {
+      "name": "korisnik_izlozba",
+      "schema": "",
+      "columns": {
+        "registracija_id": {
+          "name": "registracija_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "korisnik_id": {
+          "name": "korisnik_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "izlozba_id": {
+          "name": "izlozba_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "datum_registracije": {
+          "name": "datum_registracije",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "korisnik_izlozba_uq": {
+          "name": "korisnik_izlozba_uq",
+          "columns": [
+            {
+              "expression": "korisnik_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "izlozba_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": true,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {
+        "korisnik_izlozba_korisnik_id_korisnik_korisnik_id_fk": {
+          "name": "korisnik_izlozba_korisnik_id_korisnik_korisnik_id_fk",
+          "tableFrom": "korisnik_izlozba",
+          "tableTo": "korisnik",
+          "columnsFrom": [
+            "korisnik_id"
+          ],
+          "columnsTo": [
+            "korisnik_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "korisnik_izlozba_izlozba_id_izlozba_izlozba_id_fk": {
+          "name": "korisnik_izlozba_izlozba_id_izlozba_izlozba_id_fk",
+          "tableFrom": "korisnik_izlozba",
+          "tableTo": "izlozba",
+          "columnsFrom": [
+            "izlozba_id"
+          ],
+          "columnsTo": [
+            "izlozba_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.slika": {
+      "name": "slika",
+      "schema": "",
+      "columns": {
+        "slika_id": {
+          "name": "slika_id",
+          "type": "serial",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "fotograf_id": {
+          "name": "fotograf_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "izlozba_id": {
+          "name": "izlozba_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "naziv_fotografa": {
+          "name": "naziv_fotografa",
+          "type": "varchar(120)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "opis_slike": {
+          "name": "opis_slike",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "slika_fotograf_id_fotograf_fotograf_id_fk": {
+          "name": "slika_fotograf_id_fotograf_fotograf_id_fk",
+          "tableFrom": "slika",
+          "tableTo": "fotograf",
+          "columnsFrom": [
+            "fotograf_id"
+          ],
+          "columnsTo": [
+            "fotograf_id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "no action"
+        },
+        "slika_izlozba_id_izlozba_izlozba_id_fk": {
+          "name": "slika_izlozba_id_izlozba_izlozba_id_fk",
+          "tableFrom": "slika",
+          "tableTo": "izlozba",
+          "columnsFrom": [
+            "izlozba_id"
+          ],
+          "columnsTo": [
+            "izlozba_id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    }
+  },
+  "enums": {},
+  "schemas": {},
+  "sequences": {},
+  "roles": {},
+  "policies": {},
+  "views": {},
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  }
+}
