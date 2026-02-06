@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { mockIzlozbe } from "@/mock/data";
 
 export default function Home() {
   return (
