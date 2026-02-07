@@ -1,28 +1,23 @@
-import { Link, NavLink } from "react-router-dom";
+import Link from "next/link";
 
 export default function Navbar() {
-  const linkClass = ({ isActive }: { isActive: boolean }) =>
-    `px-3 py-2 text-sm rounded ${
-      isActive ? "bg-gray-200" : "hover:bg-gray-100"
-    }`;
-
   return (
     <header className="w-full border-b bg-white">
       <div className="mx-auto max-w-6xl px-4 py-3 flex items-center justify-between">
-        <Link to="/" className="font-semibold">
+        <Link href="/" className="font-semibold">
           Izložbe
         </Link>
 
         <nav className="flex gap-2">
-          <NavLink to="/" className={linkClass}>
+          <Link href="/" className="px-3 py-2 text-sm rounded hover:bg-gray-100">
             Početna
-          </NavLink>
-          <NavLink to="/login" className={linkClass}>
-            Login
-          </NavLink>
-          <NavLink to="/register" className={linkClass}>
-            Register
-          </NavLink>
+          </Link>
+          <Link href="/login" className="px-3 py-2 text-sm rounded hover:bg-gray-100">
+            Uloguj se
+          </Link>
+          <Link href="/register" className="px-3 py-2 text-sm rounded hover:bg-gray-100">
+            Registruj se
+          </Link>
         </nav>
       </div>
     </header>
