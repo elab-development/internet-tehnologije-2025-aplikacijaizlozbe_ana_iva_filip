@@ -58,6 +58,7 @@ export const slike = pgTable("slika", {
   izlozbaId: integer("izlozba_id")
     .notNull()
     .references(() => izlozbe.izlozbaId, { onDelete: "cascade" }),
+     slikaUrl: varchar("slika_url", { length: 500 }).notNull(),
   nazivFotografa: varchar("naziv_fotografa", { length: 120 }).notNull(),
   opisSlike: text("opis_slike"),
 });
