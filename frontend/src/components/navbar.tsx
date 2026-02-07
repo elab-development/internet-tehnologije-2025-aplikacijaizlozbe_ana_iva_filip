@@ -13,10 +13,10 @@ export default function Navbar() {
             Početna
           </Link>
           <Link href="/login" className="px-3 py-2 text-sm rounded hover:bg-gray-100">
-            Uloguj se
+            Ulogujte se
           </Link>
           <Link href="/register" className="px-3 py-2 text-sm rounded hover:bg-gray-100">
-            Registruj se
+            Registrujte se
           </Link>
         </nav>
       </div>
