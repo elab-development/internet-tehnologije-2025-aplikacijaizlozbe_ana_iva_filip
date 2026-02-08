@@ -3,7 +3,7 @@ import { korisnici, fotografi } from "./schema";
 import { db } from "./index";
 import bcrypt from "bcrypt";
 
-const hash = await bcrypt.hash("1233", 10);
+const hash = await bcrypt.hash("123456", 10);
 
 await db.transaction(async (tx) => {
   const insertedUsers = await tx

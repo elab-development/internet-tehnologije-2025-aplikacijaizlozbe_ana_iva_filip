@@ -117,7 +117,7 @@ export default function ExhibitionBrowser() {
             <p><b>Datum:</b> {selected.datum}</p>
             <button
               className="mt-3 w-full rounded bg-black px-3 py-2 text-white"
-              onClick={() => alert("Mock prijava")}
+              onClick={() => alert("Prijava krece sledeceg meseca")}
             >
               Prijavi se
             </button>
