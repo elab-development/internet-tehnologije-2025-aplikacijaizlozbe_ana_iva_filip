@@ -19,7 +19,7 @@ export default function ExhibitionBrowser() {
         id: 1,
         naziv: "Ulična fotografija",
         lokacija: "Beograd",
-        datum: "10.03.2026.",
+        datum: "10.02.2026.",
         slikaUrl: "https://picsum.photos/800/500?random=51",
       },
       {
