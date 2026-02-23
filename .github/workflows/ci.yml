@@ -24,6 +24,10 @@ jobs:
 
       - name: Build app
         run: npm run build
+        env:
+          JWT_SECRET: "1234"
+          DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/postgres"
+          NEXT_PUBLIC_API_URL: "http://localhost:3000"
 
       - name: Build Docker image
         run: docker build -t izlozba-slika-app .
