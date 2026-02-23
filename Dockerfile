@@ -10,7 +10,10 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 # Onemogućavamo Next.js telemetriju tokom build-a
-ENV NEXT_TELEMETRY_DISABLED 1
+ENV NEXT_TELEMETRY_DISABLED=1
+ENV JWT_SECRET=prazna_vrednost_za_build
+ENV DATABASE_URL=postgresql://postgres:postgres@localhost:5432/postgres
+ENV NEXT_PUBLIC_API_URL=http://localhost:3000
 RUN npm run build
 
 # 3. Stage za pokretanje (Runner)
