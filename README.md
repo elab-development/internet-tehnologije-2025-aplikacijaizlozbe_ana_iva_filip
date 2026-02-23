@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+Aplikacija za izložbe fotografija
 
-## Getting Started
+Studentski projekat iz predmeta Internet tehnologije.
+Aplikacija omogućava pregled izložbi fotografija, registraciju korisnika, prijavu na izložbe i pregled lokacije na mapi.
 
-First, run the development server:
+Funkcionalnosti
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+-Registracija i prijava korisnika (JWT autentifikacija)
+-Pregled i filtriranje izložbi po nazivu i lokaciji
+-Modal sa detaljima izložbe
+-Prikaz lokacije na mapi (geocode API)
+-Automatsko preuzimanje fotografija sa Unsplash API-ja
+-REST API rute u JSON formatu
+-Dockerizovana aplikacija
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Tehnologije
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+-Next.js (frontend + backend)
+-TypeScript
+-PostgreSQL
+-Drizzle ORM
+-Postman
+-Docker & Docker Compose
+-Swagger (API dokumentacija)
+-Unsplash API (eksterni servis)
+-OpenStreetMap Nominatim API (eksterni servis)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Pokretanje aplikacije (Docker)
 
-## Learn More
+1.Instaliran Docker Desktop
+2.U terminalu upisati komandu docker compose up --build
+3.Otvoriti u browser-u: http://localhost:3000 
 
-To learn more about Next.js, take a look at the following resources:
+Pokretanje bez Docker-a
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1.Instalirati Node.js
+2.Instalirati zavisnosti: npm install
+3.Pokrenuti aplikaciju: npm run dev
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+API dokumentacija:
+-Swagger dokumentacija dostupna je na: http://localhost:3000/api-docs
 
-## Deploy on Vercel
+Eksterni API servisi
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+-Unsplash API – automatsko preuzimanje fotografija
+-OpenStreetMap Nominatim – geokodiranje lokacija
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Autori
+
+Studentski tim
+Predmet: Internet tehnologije
+Fakultet organizacionih nauka
