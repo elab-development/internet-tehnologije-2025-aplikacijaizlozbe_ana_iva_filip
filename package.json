@@ -10,7 +10,6 @@
     "lint": "eslint",
     "db:migrate": "npx drizzle-kit generate && npx drizzle-kit push",
     "db:seed": "tsx src/db/seed.ts"
-
   },
   "dependencies": {
     "@remixicon/react": "^4.9.0",
@@ -21,7 +20,9 @@
     "next": "16.1.6",
     "pg": "^8.18.0",
     "react": "19.2.3",
-    "react-dom": "19.2.3"
+    "react-dom": "19.2.3",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-react": "^5.31.2"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -31,6 +32,8 @@
     "@types/pg": "^8.16.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/swagger-jsdoc": "^6.0.4",
+    "@types/swagger-ui-react": "^5.18.0",
     "dotenv": "^17.2.3",
     "drizzle-kit": "^0.31.8",
     "eslint": "^9",

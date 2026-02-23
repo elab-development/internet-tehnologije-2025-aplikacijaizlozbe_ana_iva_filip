@@ -10,6 +10,18 @@ type Body = {
   password: string;
 };
 
+/**
+ *  @openapi
+ *  /api/auth/login:
+ *    post:
+ *      summary: Login korisnika
+ *      description: Omogućava korisniku da se prijavi na sistem.
+ *      responses:
+ *        200:
+ *          description: Uspešna prijava
+ *        401:
+ *          description: Pogrešan email ili lozinka
+ */
 export async function POST(req: Request) {
   const { email, password } = (await req.json()) as Body;
 

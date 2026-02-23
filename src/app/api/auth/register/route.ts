@@ -11,6 +11,18 @@ type Body = {
   password: string;
 };
 
+/**
+ *  @openapi
+ *  /api/auth/register:
+ *    post:
+ *      summary: Registracija novog korisnika
+ *      description: Omogućava posetiocu da kreira nalog na platformi za izložbe.
+ *      responses:
+ *        201:
+ *          description: Korisnik uspešno kreiran.
+ *        400:
+ *          description: Loši podaci ili korisnik već postoji.
+ */
 export async function POST(req: Request) {
   const { imePrezime, email, password } = (await req.json()) as Body;
 

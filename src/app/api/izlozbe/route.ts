@@ -14,6 +14,16 @@ type CreateBody = {
   status?: string; // "AKTIVNA"...
 };
 
+/**
+ *  @openapi
+ *  /api/izlozbe:
+ *    get:
+ *      summary:.Prikaz svih izložbi
+ *      description:.Vraća listu svih izložbi sa osnovnim detaljima (naziv, lokacija, datum).
+ *      responses:
+ *        200:
+ *          description:.Lista izložbi uspešno učitana.
+ */
 export async function GET() {
   const data = await db
     .select({
