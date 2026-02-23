@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Card from "./card";
 import Modal from "./modal";
 
@@ -13,32 +13,71 @@ type Exhibition = {
 };
 
 export default function ExhibitionBrowser() {
-  const data = useMemo<Exhibition[]>(
+  const initial = useMemo<Exhibition[]>(
     () => [
       {
         id: 1,
         naziv: "Ulična fotografija",
         lokacija: "Beograd",
         datum: "10.02.2026.",
-        slikaUrl: "https://picsum.photos/800/500?random=51",
+        slikaUrl: "",
       },
       {
         id: 2,
         naziv: "Portreti",
         lokacija: "Novi Sad",
         datum: "15.03.2026.",
-        slikaUrl: "https://picsum.photos/800/500?random=52",
+        slikaUrl: "",
       },
       {
         id: 3,
         naziv: "Priroda",
         lokacija: "Niš",
         datum: "20.03.2026.",
-        slikaUrl: "https://picsum.photos/800/500?random=53",
+        slikaUrl: "",
       },
     ],
     []
   );
+
+  const [data, setData] = useState<Exhibition[]>(initial);
+  const [mapUrl, setMapUrl] = useState<string | null>(null);
+
+  // dovuci slike sa Unsplash preko nase API rute
+  useEffect(() => {
+    let cancelled = false;
+
+    async function load() {
+      const enriched = await Promise.all(
+        initial.map(async (ex) => {
+          try {
+            const r = await fetch(
+              `/api/external/unsplash?query=${encodeURIComponent(ex.naziv)}`
+            );
+            const j = await r.json();
+            
+            return {
+              ...ex,
+              slikaUrl: j?.url || "https://picsum.photos/800/500?random=99",
+            };
+          } catch {
+            return {
+              ...ex,
+              slikaUrl: "https://picsum.photos/800/500?random=99",
+            };
+          }
+        })
+      );
+
+      if (!cancelled) setData(enriched);
+    }
+
+    load();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [initial]);
 
   const [search, setSearch] = useState("");
   const [location, setLocation] = useState("");
@@ -56,14 +95,30 @@ export default function ExhibitionBrowser() {
     return matchName && matchLocation;
   });
 
-  const openModal = (ex: Exhibition) => {
-    setSelected(ex);
-    setOpen(true);
+  const openModal = async (ex: Exhibition) => {
+  setSelected(ex);
+  setOpen(true);
+  setMapUrl(null);
+
+  try {
+    const r = await fetch(
+      `/api/external/geocode?query=${encodeURIComponent(ex.lokacija)}`
+    );
+    const j = await r.json();
+
+    if (j?.lat && j?.lon) {
+      setMapUrl(`https://www.google.com/maps?q=${j.lat},${j.lon}`);
+      // alternativa bez Google: `https://www.openstreetmap.org/?mlat=${j.lat}&mlon=${j.lon}#map=14/${j.lat}/${j.lon}`
+    }
+  } catch {
+    // ignore
+  }
   };
 
   const closeModal = () => {
     setOpen(false);
     setSelected(null);
+    setMapUrl(null);
   };
 
   return (
@@ -113,8 +168,22 @@ export default function ExhibitionBrowser() {
       >
         {selected && (
           <div className="space-y-2 text-sm">
-            <p><b>Lokacija:</b> {selected.lokacija}</p>
-            <p><b>Datum:</b> {selected.datum}</p>
+            <p>
+              <b>Lokacija:</b> {selected.lokacija}
+            </p>
+            <p>
+              <b>Datum:</b> {selected.datum}
+            </p>
+            {mapUrl && (
+               <a
+                href={mapUrl}
+                target="_blank"
+                rel="noreferrer"
+                className="block mt-2 underline"
+                >
+               Prikaži na mapi
+               </a>
+            )}
             <button
               className="mt-3 w-full rounded bg-black px-3 py-2 text-white"
               onClick={() => alert("Prijava krece sledeceg meseca")}

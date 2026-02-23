@@ -16,7 +16,7 @@ export default function Card({
   return (
     <div className="rounded border bg-white overflow-hidden">
       <img
-        src={izlozba.slikaUrl}
+        src={izlozba.slikaUrl || "https://picsum.photos/800/500?random=99"}
         alt={izlozba.naziv}
         className="h-40 w-full object-cover"
       />
