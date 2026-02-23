@@ -8,6 +8,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "test": "node --test",
     "db:migrate": "npx drizzle-kit generate && npx drizzle-kit push",
     "db:seed": "tsx src/db/seed.ts"
   },
