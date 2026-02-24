@@ -45,6 +45,18 @@ Eksterni API servisi
 -Unsplash API – automatsko preuzimanje fotografija
 -OpenStreetMap Nominatim – geokodiranje lokacija
 
+
+Organizacija Git grana:
+
+Za upravljanje izvornim kodom i timski rad korišćen je Git sistem sa jasno definisanom strukturom grana. Ovakav pristup omogućava paralelni razvoj različitih funkcionalnosti bez ugrožavanja stabilnosti glavne verzije aplikacije. 
+
+Korišćene su sledeće grane:
+-main: Predstavlja primarnu granu sa stabilnom verzijom projekta. Kôd na ovoj grani je uvek testiran i spreman za produkciju.
+-develop: Glavna integraciona grana. Ovde se spajaju sve nove funkcionalnosti pre nego što pređu u main fazu.
+-feature/swagger: Namenska grana korišćena za implementaciju API dokumentacije i Swagger interfejsa.
+-feature/security: Grana na kojoj je razvijen sistem autentifikacije, zaštita ruta i rad sa JWT tokenima.
+-feature/ci-cd: Grana korišćena za postavljanje Docker konfiguracije i GitHub Actions automatizacije (CI/CD pipeline).
+
 Autori
 
 Studentski tim
