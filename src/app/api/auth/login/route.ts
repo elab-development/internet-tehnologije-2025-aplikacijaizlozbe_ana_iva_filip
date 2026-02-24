@@ -6,7 +6,6 @@ import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 import { assertSameOrigin } from "@/lib/csrf";
 
-
 type Body = {
   email: string;
   password: string;
@@ -25,12 +24,13 @@ type Body = {
  *          description: Pogrešan email ili lozinka
  */
 export async function POST(req: NextRequest) {
-   try {
+  try {
     // CSRF zaštita: dozvoljavamo POST samo sa našeg origin-a
     assertSameOrigin(req);
   } catch {
     return NextResponse.json({ error: "CSRF_BLOCKED" }, { status: 403 });
   }
+
   const { email, password } = (await req.json()) as Body;
 
   if (!email || !password) {
@@ -40,10 +40,7 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const [u] = await db
-    .select()
-    .from(korisnici)
-    .where(eq(korisnici.email, email));
+  const [u] = await db.select().from(korisnici).where(eq(korisnici.email, email));
 
   if (!u) {
     return NextResponse.json(
@@ -64,7 +61,7 @@ export async function POST(req: NextRequest) {
     sub: u.korisnikId,
     email: u.email,
     imePrezime: u.imePrezime,
-    rola: u.rola as "USER" | "FOTOGRAF" | "ADMIN", //castovali
+    rola: u.rola as "USER" | "FOTOGRAF" | "ADMIN",
   });
 
   const res = NextResponse.json({
@@ -75,6 +72,5 @@ export async function POST(req: NextRequest) {
   });
 
   res.cookies.set(AUTH_COOKIE, token, cookieOpts());
-
   return res;
 }
