@@ -50,11 +50,11 @@ export async function GET() {
                 schema: {
                   type: "object",
                   properties: {
-                    imePrezime: { type: "string", example: "Iva Ivić" }, // Usklađeno sa tvojim kodom
+                    imePrezime: { type: "string", example: "Iva Ivić" }, 
                     email: { type: "string", example: "iva@example.com" },
                     password: { type: "string", example: "sigurnaLozinka" }
                   },
-                  required: ["imePrezime", "email", "password"] // Dodato da Swagger zna šta je obavezno
+                  required: ["imePrezime", "email", "password"] 
                 }
               }
             }
