@@ -3,7 +3,9 @@ import { korisnici } from "@/db/schema";
 import { AUTH_COOKIE, cookieOpts, signAuthToken } from "@/lib/auth";
 import bcrypt from "bcrypt";
 import { eq } from "drizzle-orm";
-import { NextResponse } from "next/server";
+
+import { NextRequest, NextResponse } from "next/server";
+import { assertSameOrigin } from "@/lib/csrf";
 
 type Body = {
   imePrezime: string;
@@ -23,7 +25,13 @@ type Body = {
  *        400:
  *          description: Loši podaci ili korisnik već postoji.
  */
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
+   try {
+    // CSRF zaštita: dozvoljavamo POST samo sa našeg origin-a
+    assertSameOrigin(req);
+  } catch {
+    return NextResponse.json({ error: "CSRF_BLOCKED" }, { status: 403 });
+  }
   const { imePrezime, email, password } = (await req.json()) as Body;
 
   // 2) Validate input

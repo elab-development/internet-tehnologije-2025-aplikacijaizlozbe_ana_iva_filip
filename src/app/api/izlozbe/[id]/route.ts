@@ -1,10 +1,12 @@
 export const runtime = "nodejs";
 
-import { NextResponse } from "next/server";
+
 import { db } from "@/db";
 import { izlozbe } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { requireAdmin } from "@/lib/requireAdmin";
+import { NextRequest, NextResponse } from "next/server";
+import { assertSameOrigin } from "@/lib/csrf";
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -21,7 +23,13 @@ const toId = (raw: string) => {
   return Number.isFinite(id) ? id : null;
 };
 
-export async function PUT(req: Request, { params }: Ctx) {
+export async function PUT(req: NextRequest, { params }: Ctx) {
+  try {
+    // CSRF zaštita: dozvoljavamo PUT samo sa našeg origin-a
+    assertSameOrigin(req);
+  } catch {
+    return NextResponse.json({ error: "CSRF_BLOCKED" }, { status: 403 });
+  }
   try {
     await requireAdmin();
 
@@ -76,7 +84,13 @@ export async function PUT(req: Request, { params }: Ctx) {
   }
 }
 
-export async function DELETE(_: Request, { params }: Ctx) {
+export async function DELETE(req: NextRequest, { params }: Ctx) {
+  try {
+    // CSRF zaštita: dozvoljavamo DELETE samo sa našeg origin-a
+    assertSameOrigin(req);
+  } catch {
+    return NextResponse.json({ error: "CSRF_BLOCKED" }, { status: 403 });
+  }
   try {
     await requireAdmin();
 

@@ -1,14 +1,22 @@
 export const runtime = "nodejs";
 
-import { NextResponse } from "next/server";
+
 import { db } from "@/db";
 import { korisnikIzlozba } from "@/db/schema";
 import { and, eq } from "drizzle-orm";
 import { requireAuth } from "@/lib/requireAuth";
+import { NextRequest, NextResponse } from "next/server";
+import { assertSameOrigin } from "@/lib/csrf";
 
 type Ctx = { params: Promise<{ id: string }> };
 
-export async function DELETE(_: Request, { params }: Ctx) {
+export async function DELETE(req: NextRequest, { params }: Ctx) {
+   try {
+      // CSRF zaštita: dozvoljavamo DELETE samo sa našeg origin-a
+      assertSameOrigin(req);
+    } catch {
+      return NextResponse.json({ error: "CSRF_BLOCKED" }, { status: 403 });
+    }
   try {
     const claims = await requireAuth();
     const { id: rawId } = await params;

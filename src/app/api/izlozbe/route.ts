@@ -1,10 +1,12 @@
 export const runtime = "nodejs";
 
-import { NextResponse } from "next/server";
+
 import { db } from "@/db";
 import { izlozbe } from "@/db/schema";
 import { desc } from "drizzle-orm";
 import { requireAdmin } from "@/lib/requireAdmin";
+import { NextRequest, NextResponse } from "next/server";
+import { assertSameOrigin } from "@/lib/csrf";
 
 type CreateBody = {
   nazivIzlozbe: string;
@@ -39,7 +41,13 @@ export async function GET() {
   return NextResponse.json({ izlozbe: data });
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
+   try {
+      // CSRF zaštita: dozvoljavamo POST samo sa našeg origin-a
+      assertSameOrigin(req);
+    } catch {
+      return NextResponse.json({ error: "CSRF_BLOCKED" }, { status: 403 });
+    }
   try {
     await requireAdmin();
 

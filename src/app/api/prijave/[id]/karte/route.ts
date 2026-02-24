@@ -1,14 +1,22 @@
 export const runtime = "nodejs";
 
-import { NextResponse } from "next/server";
+
 import { db } from "@/db";
 import { karte, korisnikIzlozba } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { requireAdmin } from "@/lib/requireAdmin";
+import { NextRequest, NextResponse } from "next/server";
+import { assertSameOrigin } from "@/lib/csrf";
 
 type Ctx = { params: Promise<{ id: string }> };
 
-export async function POST(_: Request, { params }: Ctx) {
+export async function POST(req: NextRequest, { params }: Ctx) {
+  try {
+    // CSRF zaštita: dozvoljavamo POST samo sa našeg origin-a
+    assertSameOrigin(req);
+  } catch {
+    return NextResponse.json({ error: "CSRF_BLOCKED" }, { status: 403 });
+  }
   try {
     await requireAdmin();
 

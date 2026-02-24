@@ -1,13 +1,20 @@
 export const runtime = "nodejs";
 
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
+import { assertSameOrigin } from "@/lib/csrf";
 import { db } from "@/db";
 import { korisnikIzlozba } from "@/db/schema";
 import { requireAuth } from "@/lib/requireAuth";
 
 type Ctx = { params: Promise<{ id: string }> };
 
-export async function POST(_: Request, { params }: Ctx) {
+export async function POST(req: NextRequest, { params }: Ctx) {
+   try {
+      // CSRF zaštita: dozvoljavamo POST samo sa našeg origin-a
+      assertSameOrigin(req);
+    } catch {
+      return NextResponse.json({ error: "CSRF_BLOCKED" }, { status: 403 });
+    }
   try {
     const claims = await requireAuth();
     const { id: rawId } = await params;

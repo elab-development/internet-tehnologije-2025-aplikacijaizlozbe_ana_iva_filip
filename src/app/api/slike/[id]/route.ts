@@ -1,16 +1,24 @@
 export const runtime = "nodejs";
 
-import { NextResponse } from "next/server";
+
 import { db } from "@/db";
 import { slike } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { requireFotograf } from "@/lib/requireFotograf";
 import { requireAdmin } from "@/lib/requireAdmin";
+import { NextRequest, NextResponse } from "next/server";
+import { assertSameOrigin } from "@/lib/csrf";
 
 type Ctx = { params: Promise<{ id: string }> };
 
 /// PUT /api/slike/:id
-export async function PUT(req: Request, { params }: Ctx) {
+export async function PUT(req: NextRequest, { params }: Ctx) {
+  try {
+    // CSRF zaštita: dozvoljavamo PUT samo sa našeg origin-a
+    assertSameOrigin(req);
+  } catch {
+    return NextResponse.json({ error: "CSRF_BLOCKED" }, { status: 403 });
+  }
   const { id } = await params;
   const slikaId = Number(id);
   if (!Number.isFinite(slikaId)) {
@@ -52,7 +60,13 @@ export async function PUT(req: Request, { params }: Ctx) {
 }
 
 /// DELETE /api/slike/:id
-export async function DELETE(_: Request, { params }: Ctx) {
+export async function DELETE(req: NextRequest, { params }: Ctx) {
+   try {
+      // CSRF zaštita: dozvoljavamo DELETE samo sa našeg origin-a
+      assertSameOrigin(req);
+    } catch {
+      return NextResponse.json({ error: "CSRF_BLOCKED" }, { status: 403 });
+    }
   const { id } = await params;
   const slikaId = Number(id);
   if (!Number.isFinite(slikaId)) {
