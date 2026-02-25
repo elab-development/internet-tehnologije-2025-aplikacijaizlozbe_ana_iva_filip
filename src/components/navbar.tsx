@@ -31,7 +31,7 @@ export default function Navbar() {
       const u = data?.user ?? null;
       setUser(u);
 
-      if (u) {
+      if (u && u.rola === "USER") {
         const r2 = await fetch("/api/prijave/moje", { credentials: "include" });
         const d2 = await r2.json().catch(() => ({}));
         setPrijave(d2?.prijave ?? []);
@@ -91,7 +91,7 @@ export default function Navbar() {
               </button>
 
               {open && (
-                <div className="absolute right-0 mt-2 w-72 rounded border bg-white text-black shadow">
+                <div className="absolute right-0 mt-2 w-72 rounded border bg-white text-black shadow z-50">
                   <div className="px-3 py-2 text-sm">
                     <div className="font-medium truncate">{user.email}</div>
                     <div className="text-gray-600">Rola: {user.rola ?? "-"}</div>
@@ -99,31 +99,56 @@ export default function Navbar() {
 
                   <div className="border-t" />
 
-                  <div className="px-3 py-2 text-xs text-gray-500">Poslednje prijave</div>
-
-                  {prijave.slice(0, 3).map((p) => (
-                    <div key={p.registracijaId} className="px-3 py-2 text-sm">
-                      <div className="font-medium truncate">{p.nazivIzlozbe}</div>
-                      <div className="text-xs text-gray-600 truncate">
-                        {p.lokacija} • {p.datumIzlozbe}
+                  {/* LOGIKA ZA FOTOGRAFA */}
+                  {user.rola === "FOTOGRAF" ? (
+                    <>
+                      <div className="px-3 py-2 text-xs text-gray-500 font-bold uppercase">
+                        Upravljanje sadržajem
                       </div>
-                    </div>
-                  ))}
+                      <Link
+                        href="/moje-slike"
+                        onClick={() => setOpen(false)}
+                        className="block px-3 py-2 text-sm hover:bg-gray-100 text-blue-600 font-medium"
+                      >
+                        📸 Moje slike (Izmena / Brisanje)
+                      </Link>
+                      <Link
+                        href="/dodaj-sliku"
+                        onClick={() => setOpen(false)}
+                        className="block px-3 py-2 text-sm hover:bg-gray-100"
+                      >
+                        ➕ Dodaj novu sliku
+                      </Link>
+                    </>
+                  ) : (
+                    <>
+                      {/* LOGIKA ZA OBIČNOG KORISNIKA */}
+                      <div className="px-3 py-2 text-xs text-gray-500 uppercase">
+                        Poslednje prijave
+                      </div>
+                      {prijave.slice(0, 3).map((p) => (
+                        <div key={p.registracijaId} className="px-3 py-2 text-sm border-b last:border-0">
+                          <div className="font-medium truncate">{p.nazivIzlozbe}</div>
+                          <div className="text-xs text-gray-600 truncate">
+                            {p.lokacija} • {p.datumIzlozbe}
+                          </div>
+                        </div>
+                      ))}
+                      {prijave.length === 0 && (
+                        <div className="px-3 pb-2 text-sm text-gray-600">Nema prijava.</div>
+                      )}
 
-                  {prijave.length === 0 && (
-                    <div className="px-3 pb-2 text-sm text-gray-600">Nema prijava.</div>
+                      <Link
+                        href="/moje-prijave"
+                        onClick={() => setOpen(false)}
+                        className="block px-3 py-2 text-sm hover:bg-gray-100 border-t"
+                      >
+                        Sve moje prijave
+                      </Link>
+                    </>
                   )}
 
                   <div className="border-t" />
-
-                  <Link
-                    href="/moje-prijave"
-                    onClick={() => setOpen(false)}
-                    className="block px-3 py-2 text-sm hover:bg-gray-100"
-                  >
-                    Sve moje prijave
-                  </Link>
-
                   <button
                     onClick={logout}
                     className="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50"
