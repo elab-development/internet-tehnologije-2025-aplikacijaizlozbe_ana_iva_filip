@@ -6,16 +6,20 @@ import Button from "../ui/Button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
+type Role = "KORISNIK" | "FOTOGRAF";
+
 export default function RegisterPage() {
   const router = useRouter();
 
   const [imePrezime, setImePrezime] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [role, setRole] = useState<Role>("KORISNIK");
+
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
 
-  const onSubmit =async (e: React.FormEvent) => {
+  const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
@@ -32,55 +36,49 @@ export default function RegisterPage() {
       setError("Lozinka mora imati bar 6 karaktera.");
       return;
     }
-     try {
-    const res = await fetch("/api/auth/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ imePrezime, email, password }),
-    });
 
-    const data = await res.json().catch(() => ({}));
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          imePrezime,
+          email,
+          password,
+          role, // <-- BITNO
+        }),
+      });
 
-    if (!res.ok) {
-      setError(data?.error ?? "Registracija nije uspela.");
-      return;
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        setError(data?.error ?? "Registracija nije uspela.");
+        return;
+      }
+
+      setSuccess("Uspešna registracija. Preusmeravam na login...");
+      setTimeout(() => router.push("/login"), 700);
+    } catch {
+      setError("Greška na serveru.");
     }
-
-    setSuccess("Uspešna registracija. Preusmeravam na login...");
-    setTimeout(() => router.push("/login"), 700);
-  } catch {
-    setError("Greška na serveru.");
-  }
-
-
   };
 
   return (
     <main className="min-h-screen bg-gray-50">
       <div className="mx-auto max-w-md px-4 py-10">
         <h1 className="text-2xl font-semibold">Registracija</h1>
-        <p className="mt-1 text-sm text-gray-600">
-          Napravite nalog.
-        </p>
+        <p className="mt-1 text-sm text-gray-600">Napravite nalog.</p>
 
         <form onSubmit={onSubmit} className="mt-6 space-y-4 rounded border bg-white p-5">
           <div className="space-y-1">
             <label className="text-sm font-medium">Ime i prezime</label>
-            <Input
-              value={imePrezime}
-              onChange={(e) => setImePrezime(e.target.value)}
-              placeholder="npr. Petar Petrović"
-            />
+            <Input value={imePrezime} onChange={(e) => setImePrezime(e.target.value)} placeholder="npr. Petar Petrović" />
           </div>
 
           <div className="space-y-1">
             <label className="text-sm font-medium">Email</label>
-            <Input
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              type="email"
-            />
+            <Input value={email} onChange={(e) => setEmail(e.target.value)} type="email" />
           </div>
 
           <div className="space-y-1">
@@ -91,6 +89,18 @@ export default function RegisterPage() {
               placeholder="najmanje 6 karaktera"
               type="password"
             />
+          </div>
+
+          <div className="space-y-1">
+            <label className="text-sm font-medium">Rola</label>
+            <select
+              className="border px-3 py-2 rounded w-full bg-white"
+              value={role}
+              onChange={(e) => setRole(e.target.value as Role)}
+            >
+              <option value="KORISNIK">Korisnik</option>
+              <option value="FOTOGRAF">Fotograf</option>
+            </select>
           </div>
 
           {error && (
@@ -105,15 +115,11 @@ export default function RegisterPage() {
             </div>
           )}
 
-          <Button type="submit" className="w-full">
-            Registrujte se
-          </Button>
+          <Button type="submit" className="w-full">Registrujte se</Button>
 
           <p className="text-center text-sm text-gray-600">
             Već imate nalog?{" "}
-            <Link href="/login" className="font-medium underline">
-              Ulogujte se
-            </Link>
+            <Link href="/login" className="font-medium underline">Ulogujte se</Link>
           </p>
         </form>
       </div>
