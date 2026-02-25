@@ -6,7 +6,8 @@ import Button from "../ui/Button";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-type Role = "KORISNIK" | "FOTOGRAF";
+// Promenjeno da se poklapa sa vrednostima u bazi
+type Role = "USER" | "FOTOGRAF";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -14,7 +15,7 @@ export default function RegisterPage() {
   const [imePrezime, setImePrezime] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [role, setRole] = useState<Role>("KORISNIK");
+  const [role, setRole] = useState<Role>("USER"); // Default je sada USER
 
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -46,7 +47,7 @@ export default function RegisterPage() {
           imePrezime,
           email,
           password,
-          role, // <-- BITNO
+          rola: role, // Šaljemo pod ključem 'rola' koji backend očekuje
         }),
       });
 
@@ -94,11 +95,11 @@ export default function RegisterPage() {
           <div className="space-y-1">
             <label className="text-sm font-medium">Rola</label>
             <select
-              className="border px-3 py-2 rounded w-full bg-white"
+              className="border px-3 py-2 rounded w-full bg-white text-black"
               value={role}
               onChange={(e) => setRole(e.target.value as Role)}
             >
-              <option value="KORISNIK">Korisnik</option>
+              <option value="USER">Korisnik</option>
               <option value="FOTOGRAF">Fotograf</option>
             </select>
           </div>
