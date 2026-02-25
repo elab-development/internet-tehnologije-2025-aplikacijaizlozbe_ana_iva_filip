@@ -11,6 +11,7 @@ type Body = {
   imePrezime: string;
   email: string;
   password: string;
+  rola?: string;
 };
 
 /**
@@ -26,20 +27,18 @@ type Body = {
  *          description: Loši podaci ili korisnik već postoji.
  */
 export async function POST(req: NextRequest) {
-   try {
-    // CSRF zaštita: dozvoljavamo POST samo sa našeg origin-a
+  try {
     assertSameOrigin(req);
   } catch {
     return NextResponse.json({ error: "CSRF_BLOCKED" }, { status: 403 });
   }
-  const { imePrezime, email, password } = (await req.json()) as Body;
 
-  // 2) Validate input
+  const { imePrezime, email, password, rola } = (await req.json()) as Body;
+
   if (!imePrezime || !email || !password) {
     return NextResponse.json({ error: "Nedostaju podaci" }, { status: 400 });
   }
 
-  // 3) Email postoji?
   const exists = await db
     .select({ id: korisnici.korisnikId })
     .from(korisnici)
@@ -49,14 +48,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Email postoji u bazi" }, { status: 400 });
   }
 
-  // 4) Hash
   const passwordHash = await bcrypt.hash(password, 10);
 
-  // 5) Create user (rola default USER)
   const [u] = await db
     .insert(korisnici)
     .values({
-      rola: "USER",
+      rola: rola || "USER",
       imePrezime,
       email,
       passwordHash,
@@ -68,7 +65,6 @@ export async function POST(req: NextRequest) {
       rola: korisnici.rola,
     });
 
-  // 6) Sign JWT
   const token = signAuthToken({
     sub: u.id,
     email: u.email,
@@ -76,7 +72,6 @@ export async function POST(req: NextRequest) {
     rola: u.rola as "USER" | "FOTOGRAF" | "ADMIN",
   });
 
-  // 7) Set cookie
   const res = NextResponse.json(u);
   res.cookies.set(AUTH_COOKIE, token, cookieOpts());
 
