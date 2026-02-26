@@ -46,4 +46,3 @@ await db.transaction(async (tx) => {
 });
 
 process.exit(0);
-
