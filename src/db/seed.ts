@@ -27,6 +27,12 @@ await db.transaction(async (tx) => {
         email: "djokovic@gmail.com",
         passwordHash: hash,
       },
+      {
+        rola: "FOTOGRAF",
+        imePrezime: "Iva Milić",
+        email: "iva@gmail.com",
+        passwordHash: hash,
+      },
     ])
     .returning({
       id: korisnici.korisnikId,
