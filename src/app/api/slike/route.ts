@@ -7,11 +7,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { assertSameOrigin } from "@/lib/csrf";
 
 export async function POST(req: NextRequest) {
-  try {
+  /*try {
     assertSameOrigin(req);
   } catch {
     return NextResponse.json({ error: "CSRF_BLOCKED" }, { status: 403 });
-  }
+  }*/
 
   try {
     const fotograf = await requireFotograf(); 

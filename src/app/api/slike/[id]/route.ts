@@ -12,12 +12,12 @@ type Ctx = { params: Promise<{ id: string }> };
 
 /// PUT /api/slike/:id
 export async function PUT(req: NextRequest, { params }: Ctx) {
-  try {
+ /* try {
     // CSRF zaštita
     assertSameOrigin(req);
   } catch {
     return NextResponse.json({ error: "CSRF_BLOCKED" }, { status: 403 });
-  }
+  }*/
 
   const { id } = await params;
   const slikaId = Number(id);
