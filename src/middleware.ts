@@ -3,6 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 const ALLOWED_ORIGINS = [
   "http://localhost:3000",
   process.env.APP_ORIGIN,
+  process.env.VERCEL_URL
+  ? `https://${process.env.VERCEL_URL}`
+  : null
 ].filter(Boolean) as string[];
 
 export function middleware(req: NextRequest) {
